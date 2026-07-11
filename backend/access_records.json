@@ -1,0 +1,22 @@
+[
+  {
+    "employee_no": "BBAC10001",
+    "card_no": "0012345678",
+    "name": "张伟",
+    "campus": "MRA",
+    "gate": "MRA1总装主入口",
+    "direction": "进",
+    "time": "2026-07-11 21:41:58",
+    "result": "通行成功"
+  },
+  {
+    "employee_no": "23455",
+    "card_no": "12345678",
+    "name": "硕士",
+    "campus": "MRA1",
+    "gate": "1",
+    "direction": "进",
+    "time": "2026-07-11 21:45:34",
+    "result": "通行成功"
+  }
+]
