@@ -35,6 +35,13 @@
         "is_active": true
     },
     {
+        "name": "周卡号",
+        "employee_no": "TEST10001",
+        "card_no": "CARD10001",
+        "person_type": "正式工",
+        "is_active": true
+    },
+    {
         "name": "周卡",
         "employee_no": "TEST10005",
         "card_no": "CARD10005",
