@@ -1,0 +1,4 @@
+employee_no,card_no,name,campus,gate,direction,time,result
+BBAC20001,0020000001,陈晨,MRA,MRA 西门,进,2026-07-20 08:05:00,通行成功
+BBAC20002,0020000002,周杰,PT1,PT1 南门,出,2026-07-20 18:30:00,通行成功
+BBAC20003,0020000003,吴敏,MRA1,MRA1 临时门,进,2026-07-20 08:15:00,通行成功
