@@ -26,6 +26,8 @@ ALLOWED_DIRECTIONS = {"进", "出"}
 VALID_RECORDS_FILE = Path(__file__).parent / "valid_access_records.json"
 CSV_RECORDS_FILE = Path(__file__).parent / "sample_access_records.csv"
 CSV_IMPORT_ERRORS_FILE = Path(__file__).parent / "csv_import_errors.csv"
+PRESENT_PEOPLE_EXPORT_FILE = Path(__file__).parent / "present_people_export.csv"
+FILTERED_RECORDS_EXPORT_FILE = Path(__file__).parent / "filtered_records_export.csv"
 
 
 @dataclass
@@ -338,6 +340,34 @@ def save_import_errors(error_reports):
     print(f"错误明细已保存到：{CSV_IMPORT_ERRORS_FILE}")
 
 
+def save_records_to_csv(record_list, csv_file):
+    """把刷卡记录列表导出成 CSV 文件。
+
+    这个函数用于导出查询结果。
+    例如后续可以导出当前在场人员、某一天刷卡记录或组合筛选结果。
+    """
+
+    fieldnames = [
+        "employee_no",
+        "card_no",
+        "name",
+        "campus",
+        "gate",
+        "direction",
+        "time",
+        "result",
+    ]
+
+    with csv_file.open("w", encoding="utf-8", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for record in record_list:
+            writer.writerow(record_to_dict(record))
+
+    print(f"已导出 {len(record_list)} 条记录到：{csv_file}")
+
+
 def get_record_unique_key(record):
     """生成一条刷卡记录的唯一标识。
 
@@ -447,13 +477,14 @@ def find_records_by_campus(record_list, campus):
     return matched_records
 
 
-def filter_records(record_list, date_text="", campus="", direction=""):
+def filter_records(record_list, date_text="", campus="", gate="", direction=""):
     """按多个条件筛选刷卡记录。
 
     这里用空字符串表示“不筛选这个条件”。
     例如：
     - date_text="2026-07-19" 表示只看这一天
     - campus="MRA" 表示只看 MRA
+    - gate="MRA 东门" 表示只看这个门禁点
     - direction="进" 表示只看进场记录
     """
 
@@ -464,6 +495,9 @@ def filter_records(record_list, date_text="", campus="", direction=""):
             continue
 
         if campus and record.campus != campus:
+            continue
+
+        if gate and record.gate != gate:
             continue
 
         if direction and record.direction != direction:
@@ -585,6 +619,13 @@ def build_overview_summary(record_list):
         "present_count": len(present_people),
         "campus_present_counts": campus_counts,
     }
+
+
+def build_date_overview_summary(record_list, date_text):
+    """生成某一天的门禁记录总览摘要。"""
+
+    date_records = find_records_by_date(record_list, date_text)
+    return build_overview_summary(date_records)
 
 
 def print_overview_summary(summary):

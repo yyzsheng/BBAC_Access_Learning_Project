@@ -1,0 +1,45 @@
+{
+  "people": [
+    {
+      "employee_no": "BBAC10001",
+      "name": "张伟",
+      "person_type": "正式工",
+      "organization": "总装车间",
+      "campus": "MRA",
+      "is_active": true
+    },
+    {
+      "employee_no": "TP20001",
+      "name": "李明",
+      "person_type": "三方",
+      "organization": "保洁供应商",
+      "campus": "PT1",
+      "is_active": true
+    },
+    {
+      "employee_no": "VIS30001",
+      "name": "访客甲",
+      "person_type": "访客",
+      "organization": "访客单位",
+      "campus": "PT2",
+      "is_active": true
+    }
+  ],
+  "cards": [
+    {
+      "card_no": "CARD10001",
+      "employee_no": "BBAC10001",
+      "is_active": true
+    },
+    {
+      "card_no": "CARD20001",
+      "employee_no": "TP20001",
+      "is_active": true
+    },
+    {
+      "card_no": "CARD30001",
+      "employee_no": "VIS30001",
+      "is_active": true
+    }
+  ]
+}

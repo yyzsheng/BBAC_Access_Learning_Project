@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Git 上传 GitHub 学习流程</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f6f7f9;
+      color: #20242a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.7;
+    }
+
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 40px 24px 64px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 32px;
+      line-height: 1.25;
+    }
+
+    h2 {
+      margin: 34px 0 12px;
+      padding-top: 8px;
+      border-top: 1px solid #dfe3e8;
+      font-size: 22px;
+    }
+
+    h3 {
+      margin: 24px 0 8px;
+      font-size: 18px;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+
+    .summary {
+      background: #eef6ff;
+      border-color: #bfdcff;
+    }
+
+    .warning {
+      background: #fff7e8;
+      border-color: #ffd591;
+    }
+
+    code {
+      background: #edf0f3;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.95em;
+    }
+
+    pre {
+      overflow-x: auto;
+      background: #111827;
+      color: #f9fafb;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      margin: 14px 0;
+    }
+
+    th,
+    td {
+      border: 1px solid #dfe3e8;
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f0f2f5;
+    }
+
+    ul,
+    ol {
+      padding-left: 24px;
+    }
+
+    .small {
+      color: #5f6b7a;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Git 上传 GitHub 学习流程</h1>
+    <p class="small">适用于本项目：BBAC_Access_Learning_Project</p>
+
+    <section class="card summary">
+      <h2>一句话记住</h2>
+      <p><strong>Git 上传分三步：add 选文件，commit 保存到本地历史，push 上传到 GitHub。</strong></p>
+      <pre><code>git add ...
+git commit -m "提交说明"
+git push</code></pre>
+    </section>
+
+    <h2>0. 先进入项目目录</h2>
+    <p>如果终端前面显示的是 <code>~</code>，说明你在家目录，不在项目里。必须先进入项目目录。</p>
+    <pre><code>cd /Users/hongxuchai/Desktop/BBAC_Access_Learning_Project</code></pre>
+    <p>然后检查位置：</p>
+    <pre><code>pwd</code></pre>
+    <p>正确时应该看到：</p>
+    <pre><code>/Users/hongxuchai/Desktop/BBAC_Access_Learning_Project</code></pre>
+
+    <section class="card warning">
+      <h3>常见错误</h3>
+      <pre><code>fatal: not a git repository (or any of the parent directories): .git</code></pre>
+      <p>意思是：你不在 Git 项目目录里。解决方法就是先执行上面的 <code>cd</code> 命令。</p>
+    </section>
+
+    <h2>1. 查看当前状态</h2>
+    <pre><code>git status</code></pre>
+    <p>这个命令是每次提交前都要看的。它会告诉你：</p>
+    <ul>
+      <li>哪些文件是新建的</li>
+      <li>哪些文件被修改了</li>
+      <li>哪些文件已经准备提交</li>
+    </ul>
+
+    <h2>2. 选中要提交的文件：git add</h2>
+    <p>如果你看到：</p>
+    <pre><code>Untracked files:
+  backend/access_record_cli.py
+  backend/access_record_model.py</code></pre>
+    <p>意思是：这些文件 Git 还没有跟踪，需要先 add。</p>
+    <pre><code>git add backend/access_record_cli.py backend/access_record_model.py backend/test_access_record_model.py backend/sample_access_records.csv backend/valid_access_records.json</code></pre>
+    <p>如果你确定当前所有改动都要提交，也可以用：</p>
+    <pre><code>git add .</code></pre>
+    <p>初学阶段建议先用明确文件名，比较安全。</p>
+
+    <h2>3. 再次检查状态</h2>
+    <pre><code>git status</code></pre>
+    <p>如果 add 成功，会看到类似：</p>
+    <pre><code>Changes to be committed:
+  new file:   backend/access_record_cli.py
+  new file:   backend/access_record_model.py</code></pre>
+    <p>这表示文件已经进入“准备提交区”。</p>
+
+    <h2>4. 创建本地提交：git commit</h2>
+    <pre><code>git commit -m "learn: complete access record CLI exercise"</code></pre>
+    <p><code>-m</code> 后面是这次提交的说明。提交说明要简单描述你做了什么。</p>
+    <table>
+      <thead>
+        <tr>
+          <th>提交说明</th>
+          <th>适合场景</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>learn: add access record model</code></td>
+          <td>新增刷卡记录模型</td>
+        </tr>
+        <tr>
+          <td><code>learn: add access record CLI</code></td>
+          <td>新增命令行菜单</td>
+        </tr>
+        <tr>
+          <td><code>learn: add access record tests</code></td>
+          <td>新增测试</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <section class="card warning">
+      <h3>如果 commit 时看到这个</h3>
+      <pre><code>nothing added to commit but untracked files present</code></pre>
+      <p>意思是：你还没有执行 <code>git add</code>，所以 Git 没有东西可以提交。</p>
+      <p>解决方法：</p>
+      <pre><code>git add 文件名
+git commit -m "提交说明"</code></pre>
+    </section>
+
+    <h2>5. 上传到 GitHub：git push</h2>
+    <pre><code>git push</code></pre>
+    <p>这一步会把本地 commit 上传到 GitHub。</p>
+    <p>如果你没有先 commit，push 会显示：</p>
+    <pre><code>Everything up-to-date</code></pre>
+    <p>这不是错误，它的意思是：没有新的提交需要上传。</p>
+
+    <h2>6. 最后确认是否干净</h2>
+    <pre><code>git status</code></pre>
+    <p>正常完成后，应该看到类似：</p>
+    <pre><code>Your branch is up to date with 'origin/main'.
+nothing to commit, working tree clean</code></pre>
+    <p>这表示：本地没有未提交内容，GitHub 也已经同步。</p>
+
+    <section class="card summary">
+      <h2>完整流程模板</h2>
+      <pre><code>cd /Users/hongxuchai/Desktop/BBAC_Access_Learning_Project
+git status
+git add 文件名1 文件名2 文件名3
+git status
+git commit -m "提交说明"
+git push
+git status</code></pre>
+    </section>
+
+    <h2>你当前项目常用命令</h2>
+    <h3>运行刷卡记录菜单</h3>
+    <pre><code>python3 backend/access_record_cli.py</code></pre>
+
+    <h3>运行测试</h3>
+    <pre><code>python3 -m unittest backend.test_access_record_model</code></pre>
+
+    <h3>检查 Python 语法</h3>
+    <pre><code>python3 -m py_compile backend/*.py</code></pre>
+
+    <h2>学习重点</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>命令</th>
+          <th>中文理解</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>git status</code></td>
+          <td>看看现在有什么变化</td>
+        </tr>
+        <tr>
+          <td><code>git add</code></td>
+          <td>选中要提交的文件</td>
+        </tr>
+        <tr>
+          <td><code>git commit</code></td>
+          <td>把选中的文件保存成本地历史记录</td>
+        </tr>
+        <tr>
+          <td><code>git push</code></td>
+          <td>把本地历史记录上传到 GitHub</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

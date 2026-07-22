@@ -21,11 +21,43 @@
 ## 当前状态
 
 - [x] 学习项目初始化
-- [ ] 第 1 周第 1 天：环境检查与第一个 Python 程序
+- [x] 第一阶段：Python 与命令行小项目
+- [x] 人员与卡片命令行管理
+- [x] 刷卡记录命令行管理
+- [x] JSON 保存和读取
+- [x] CSV 导入、校验、错误报告和去重
+- [x] 查询、筛选、统计、在场人员和导出
+- [x] Python 自动测试
 - [ ] Vue 前端初始化
 - [ ] FastAPI 后端初始化
 - [ ] MySQL 数据库初始化
 - [ ] 内部测试部署
+
+## 第一阶段运行入口
+
+人员与卡片菜单：
+
+```bash
+python3 backend/person_cli.py
+```
+
+刷卡记录菜单：
+
+```bash
+python3 backend/access_record_cli.py
+```
+
+运行第一阶段测试：
+
+```bash
+python3 -m unittest backend.test_access_record_model backend.test_person_card_model
+```
+
+检查 Python 语法：
+
+```bash
+python3 -m py_compile backend/*.py
+```
 
 ## 学习规则
 

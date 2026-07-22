@@ -6,13 +6,16 @@
 
 from access_record_model import (
     CSV_RECORDS_FILE,
+    FILTERED_RECORDS_EXPORT_FILE,
+    PRESENT_PEOPLE_EXPORT_FILE,
     build_import_report,
+    build_date_overview_summary,
     build_overview_summary,
+    count_present_people_by_campus,
     find_records_by_campus,
     find_records_by_date,
     find_records_by_employee_no,
     filter_records,
-    count_present_people_by_campus,
     get_present_people,
     import_valid_csv_records,
     load_records_from_csv,
@@ -21,6 +24,7 @@ from access_record_model import (
     print_overview_summary,
     print_record_list,
     save_import_errors,
+    save_records_to_csv,
 )
 
 
@@ -36,6 +40,9 @@ def print_menu():
     print("6. 组合筛选")
     print("7. 查看当前在场人员")
     print("8. 查看各厂区在场人数")
+    print("9. 导出当前在场人员 CSV")
+    print("10. 查看某日总览摘要")
+    print("11. 导出组合筛选结果 CSV")
     print("0. 退出")
 
 
@@ -100,12 +107,14 @@ def handle_combined_filter(records):
     print("如果某个条件不想筛选，直接按回车跳过")
     date_text = input("请输入日期（YYYY-MM-DD）：").strip()
     campus = input("请输入厂区（MRA/PT1/PT2）：").strip()
+    gate = input("请输入门禁点：").strip()
     direction = input("请输入方向（进/出）：").strip()
 
     matched_records = filter_records(
         records,
         date_text=date_text,
         campus=campus,
+        gate=gate,
         direction=direction,
     )
     print_record_list(matched_records)
@@ -126,6 +135,41 @@ def handle_present_count_by_campus(records):
 
     for campus, count in campus_counts.items():
         print(f"{campus}：{count}")
+
+
+def handle_export_present_people(records):
+    """处理导出当前在场人员功能。"""
+
+    present_people = get_present_people(records)
+    save_records_to_csv(present_people, PRESENT_PEOPLE_EXPORT_FILE)
+
+
+def handle_date_overview(records):
+    """处理某日总览摘要功能。"""
+
+    date_text = input("请输入日期（YYYY-MM-DD）：").strip()
+    summary = build_date_overview_summary(records, date_text)
+    print_overview_summary(summary)
+
+
+def handle_export_filtered_records(records):
+    """处理导出组合筛选结果功能。"""
+
+    print("如果某个条件不想筛选，直接按回车跳过")
+    date_text = input("请输入日期（YYYY-MM-DD）：").strip()
+    campus = input("请输入厂区（MRA/PT1/PT2）：").strip()
+    gate = input("请输入门禁点：").strip()
+    direction = input("请输入方向（进/出）：").strip()
+
+    matched_records = filter_records(
+        records,
+        date_text=date_text,
+        campus=campus,
+        gate=gate,
+        direction=direction,
+    )
+    print_record_list(matched_records)
+    save_records_to_csv(matched_records, FILTERED_RECORDS_EXPORT_FILE)
 
 
 def main():
@@ -153,6 +197,12 @@ def main():
             handle_present_people(records)
         elif choice == "8":
             handle_present_count_by_campus(records)
+        elif choice == "9":
+            handle_export_present_people(records)
+        elif choice == "10":
+            handle_date_overview(records)
+        elif choice == "11":
+            handle_export_filtered_records(records)
         elif choice == "0":
             print("程序已退出")
             break

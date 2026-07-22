@@ -5,10 +5,13 @@
 """
 
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from backend.access_record_model import (
     AccessRecord,
     build_import_report,
+    build_date_overview_summary,
     build_overview_summary,
     count_direction_records,
     find_records_by_date,
@@ -16,6 +19,7 @@ from backend.access_record_model import (
     filter_records,
     get_present_people,
     remove_duplicate_records,
+    save_records_to_csv,
     sort_records_by_time,
     validate_access_record,
 )
@@ -109,6 +113,18 @@ class AccessRecordModelTest(unittest.TestCase):
         self.assertEqual(len(matched_records), 1)
         self.assertEqual(matched_records[0].name, "张伟")
 
+    def test_filter_records_by_gate(self):
+        matched_records = filter_records(
+            self.records,
+            date_text="2026-07-19",
+            campus="PT1",
+            gate="PT1 办公楼入口",
+            direction="进",
+        )
+
+        self.assertEqual(len(matched_records), 1)
+        self.assertEqual(matched_records[0].employee_no, "BBAC10002")
+
     def test_build_import_report(self):
         invalid_record = AccessRecord(
             employee_no="BBAC20003",
@@ -166,6 +182,38 @@ class AccessRecordModelTest(unittest.TestCase):
         self.assertEqual(summary["outbound_count"], 1)
         self.assertEqual(summary["present_count"], 1)
         self.assertEqual(summary["campus_present_counts"]["PT1"], 1)
+
+    def test_build_date_overview_summary(self):
+        next_day_record = AccessRecord(
+            employee_no="BBAC20001",
+            card_no="0020000001",
+            name="陈晨",
+            campus="MRA",
+            gate="MRA 西门",
+            direction="进",
+            time="2026-07-20 08:05:00",
+            result="通行成功",
+        )
+        records = self.records + [next_day_record]
+
+        summary = build_date_overview_summary(records, "2026-07-20")
+
+        self.assertEqual(summary["total_records"], 1)
+        self.assertEqual(summary["inbound_count"], 1)
+        self.assertEqual(summary["outbound_count"], 0)
+        self.assertEqual(summary["present_count"], 1)
+
+    def test_save_records_to_csv(self):
+        with TemporaryDirectory() as temp_dir:
+            csv_file = Path(temp_dir) / "records.csv"
+
+            save_records_to_csv(self.records, csv_file)
+
+            content = csv_file.read_text(encoding="utf-8")
+
+        self.assertIn("employee_no,card_no,name,campus,gate,direction,time,result", content)
+        self.assertIn("BBAC10001", content)
+        self.assertIn("李明", content)
 
 
 if __name__ == "__main__":
